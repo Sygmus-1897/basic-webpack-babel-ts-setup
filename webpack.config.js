@@ -1,12 +1,13 @@
-const prod = process.env.NODE_ENV === "production";
-
+const path = require("path");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
+
+const prod = process.env.NODE_ENV === "production";
 
 module.exports = {
   mode: prod ? "production" : "development",
   entry: {
-    bundle: "./src/index.tsx",
+    bundle: path.resolve(__dirname, 'src/index.tsx'),
   },
   output: {
 		clean: true,
@@ -16,25 +17,15 @@ module.exports = {
   module: {
     rules: [
       {
-        test: /\.(ts|tsx)$/,
+				test: /\.(js|jsx|ts|tsx)$/,
         exclude: /node_modules/,
         resolve: {
-          extensions: [".ts", ".tsx", ".json"],
-        },
-        use: "ts-loader",
-      },
-			{
-				test: /\.(js|jsx)$/,
-        exclude: /node_modules/,
-        resolve: {
-          extensions: [".jsx", ".js"],
+          extensions: [".jsx", ".js", ".ts", ".tsx", ".json"],
         },
         use: {
 					loader: 'babel-loader',
 					options: {
-						presets: [
-							['@babel/preset-env', { targets: "defaults" }]
-						]
+						presets: ['@babel/preset-env', ["@babel/preset-react", {"runtime": "automatic"}], "@babel/preset-typescript"],
 					}
 				}
 			},
